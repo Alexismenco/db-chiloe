@@ -392,8 +392,8 @@ app.post('/anunciate1', async (req, res) => {
         currency: 'CLP',
         payment: 1,
         expired: expired.toString(),
-        urlreturn: "http://localhost:3000/confirmacion-pago?email="+req.body.email,
-        urlnotify: "http://localhost:3000/notificacion-pago?email="+req.body.email,
+        urlreturn: process.env.MIHOST+"confirmacion-pago?email="+req.body.email,
+        urlnotify: process.env.MIHOST+"notificacion-pago?email="+req.body.email,
         additional_parameters: {
           parameters1: "keyValue1",
           parameters2: "keyValue54",
@@ -405,7 +405,7 @@ app.post('/anunciate1', async (req, res) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + process.env.PAYKU_TK_PUBLIC_DES // Reemplaza 'your_test_api_key' con tu clave de API de prueba de Payku
+          'Authorization': 'Bearer ' + process.env.PAYKU_TK_PUBLIC_APP // Reemplaza 'your_test_api_key' con tu clave de API de prueba de Payku
         },
         body: JSON.stringify(data)
       });
@@ -442,7 +442,7 @@ app.post('/anunciate1', async (req, res) => {
               method: 'GET',
               headers: {
                   'Content-Type': 'application/json',
-                  'Authorization': 'Bearer ' + process.env.PAYKU_TK_PUBLIC_DES
+                  'Authorization': 'Bearer ' + process.env.PAYKU_TK_PUBLIC_APP
               },
           });
           const result = await response.json();
