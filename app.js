@@ -401,7 +401,7 @@ app.post('/anunciate1', async (req, res) => {
         }
       };
   
-      const response = await fetch('https://des.payku.cl/api/transaction/', { 
+      const response = await fetch('https://app.payku.cl/api/transaction/', { 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -438,7 +438,7 @@ app.post('/anunciate1', async (req, res) => {
       const transactionId = req.session.transactionId;
 
       if (transactionId) {
-          const response = await fetch(`https://des.payku.cl/api/transaction/${transactionId}`, {
+          const response = await fetch(`https://app.payku.cl/api/transaction/${transactionId}`, {
               method: 'GET',
               headers: {
                   'Content-Type': 'application/json',
