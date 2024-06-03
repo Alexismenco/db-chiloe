@@ -1,0 +1,87 @@
+<%- include ("./partials/cabecera") %> 
+
+<body style="background-image: url(/img/bg3-blur.webp) !important;">
+    <div style="right: 0; top:100px; max-width:700px; z-index:3; position:fixed; padding: 10px 25px 20px;">
+        <div class="container"></div>
+    </div>
+
+    <nav class="navbar navbar-expand-lg bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand text-white offset-md-1" href="/">Sexo Chiloé</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarText">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a style="text-decoration: none;" class="text-danger" href="/"><i class="fas fa-chevron-left text-danger" aria-hidden="true"></i> Volver</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ml-auto nav-flex-icons text-center offset-md-1">
+                    <li class="nav-item"><a class="nav-link disabled text-white-50" href="/login">¿Tienes una cuenta?</a></li>
+                    <li class="nav-item"><a class="nav-link btn btn-danger btn-sm text-white" href="/login">Iniciar Sesión <span class="sr-only">(current)</span></a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <style>
+        .form-signin {
+            margin: 0 auto;
+            margin-top: 100px;
+            max-width: 600px;
+            padding: 25px;
+            border-radius: 5px;
+        }
+    </style>
+
+    <form id="registration-form" class="form-signin" action="/register" method="post">
+        <h1 class="h3 mb-0 font-weight-normal">Regístrate</h1>
+        <p class="mb-3 text-muted">Registro solo para colaboradores (mayores de 18 años)</p>
+
+        <div class="form-group field-registrationform-username required">
+            <label for="registrationform-username">Nombre de usuario</label>
+            <input type="text" id="registrationform-username" class="form-control mt-2" name="usuario" aria-required="true">
+            <div class="invalid-feedback"></div>
+        </div>
+
+        <div class="mt-3 form-group field-registrationform-email required">
+            <label for="registrationform-email">Correo electrónico</label>
+            <input type="email" id="registrationform-email" class="form-control mt-2" name="email" aria-required="true">
+            <div class="invalid-feedback"></div>
+        </div>
+
+        <div class="mt-3 form-group field-registrationform-password required">
+            <label for="registrationform-password">Contraseña</label>
+            <div class="input-group mb-3">
+                <input type="password" id="registrationform-password" class="form-control mt-2" name="password" aria-required="true" minlength="8">
+                <div class="input-group-append">
+                    <button class="btn btn-secondary toggle-password mt-2" style="border-radius: 0 5px 5px 0;" type="button" toggle="#registrationform-password">
+                        <span class="fa fa-fw fa-eye field-icon" aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div class="invalid-feedback"></div>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                $(document).on('click', '.toggle-password', function() {
+                    const field = $($(this).attr('toggle'));
+                    const type = field.attr('type') === 'password' ? 'text' : 'password';
+                    field.attr('type', type);
+                    $(this).find('span').toggleClass('fa-eye fa-eye-slash');
+                });
+            })
+        </script>
+
+        <button class="btn btn-primary btn-block mt-3 w-100 btn-danger" type="submit">Regístrate</button>
+        <p class="mt-3 mb-3 text-muted text-center">
+            <a href="/login" class="text-muted">¿Ya tienes una cuenta? Inicia sesión</a>
+        </p>
+    </form>
+
+    <script type="text/javascript"> var currentSite = 'site/registration'; </script>
+
+<%- include ("./partials/footer") %> 
+<%- include ("./partials/pie") %> 

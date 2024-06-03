@@ -1,0 +1,78 @@
+<%- include ("./partials/cabecera") %> 
+<%- include ("./partials/navbar") %> 
+
+<div class="text-center mt-5 mb-5">
+    <h1 class="text-white text-center mt-5" style="font-family: Georgia, 'Times New Roman', Times, serif;">
+        Diablitas Chiloé
+    </h1>
+</div>
+<div class="text-center mt-5 mb-5">
+    <!-- Aquí puedes agregar cualquier contenido adicional, como un título -->
+    <img class="img-fluid loading" src="https://www.onlinelogomaker.com/blog/wp-content/uploads/2017/09/Erotic-Logo.jpg" width="250" height="94" alt="Logo de SEXOSUR" data-ll-status="loading">
+</div>
+
+<div class="container">
+    <h4 class="text-white text-center mt-5">
+        <i class="fas fa-map-marker-alt text-danger" aria-hidden="true"></i> ELIJA SU UBICACIÓN 
+    </h4>
+    <p class="text-center text-muted"> Al entrar declaras ser mayor de 18 años. </p>
+    <ul class="list-inline text-white text-center" style="margin-bottom: 100px">
+        <li class="list-inline-item"><a class="text-white btn btn-danger btn-sm mt-3" href="/Ancud">Ancud</a></li>
+        <li class="list-inline-item"><a class="text-white btn btn-danger btn-sm mt-3" href="/Quemchi">Quemchi</a></li>
+        <li class="list-inline-item"><a class="text-white btn btn-danger btn-sm mt-3" href="/Castro">Castro</a></li>
+        <li class="list-inline-item"><a class="text-white btn btn-danger btn-sm mt-3" href="/Dalcahue">Dalcahue</a></li>
+        <li class="list-inline-item"><a class="text-white btn btn-danger btn-sm mt-3" href="/Chonchi">Chonchi</a></li>
+        <li class="list-inline-item"><a class="text-white btn btn-danger btn-sm mt-3" href="/Quellon">Quellón</a></li>
+    </ul>
+</div>
+
+<div class="container text-center">
+    <h3><b>Aquí encontrarás nuestros colaboradores con los servicios más amados por nuestros clientes.</b></h3>
+    <!-- Agrega una breve descripción si lo deseas -->
+
+    <div class="row mt-5">
+        <!-- Comienza la sección de la galería -->
+
+        <!-- Para cada colaborador con su imagen de portada -->
+        <% colaboradoresConPortada.forEach(colaborador => { %>
+            <div class="col-md-4 mb-4">
+                <div class="card" style="background-color: transparent;">
+                    <a href="/colaborador/<%= colaborador.colaborador.id %> " style="text-decoration: none; color: white;">
+                    <!-- Si el colaborador tiene una imagen de portada, muéstrala -->
+                    <% if (colaborador.imagen_portada) { %>
+                        <div class="imagen-container">
+                            <img src="<%= colaborador.imagen_portada %>" class="card-img-top imagen-card" alt="Portada de <%= colaborador.colaborador.nombre_usuario %>" style="max-width: 100%; max-height: 300px; width: auto; height: auto; border-radius: 20px;">
+                        </div>
+                    <% } %>
+                    <div class="card-body">
+                        <!-- Muestra el nombre y otros detalles del colaborador -->
+                        <h5 class="card-title"><%= colaborador.colaborador.nombre_usuario %> <span><i class="fas fa-check-circle" aria-hidden="true" style="color: blue;"></i></span></h5>
+                        <p class="card-text"><%= colaborador.colaborador.ciudad + ', ' + colaborador.colaborador.edad %> años</p>
+                        <!-- Puedes añadir más detalles aquí -->
+                    </div>
+                    </a>
+                </div>
+            </div>
+        <% }); %>
+        
+        <!-- Repite el mismo formato para cada colaborador -->
+    </div>
+</div>
+
+<%- include ("./partials/footer") %> 
+<%- include ("./partials/pie") %>
+
+
+<style>
+    .imagen-container {
+    width: 100%;
+    height: 300px; /* Establece la altura máxima deseada para las imágenes */
+    overflow: hidden; /* Oculta cualquier parte de la imagen que exceda la altura máxima */
+}
+
+.imagen-card {
+    width: 100%; /* Establece que la imagen ocupe todo el ancho del contenedor */
+    height: 100%; /* Permite que la altura de la imagen se ajuste automáticamente para mantener la proporción */
+}
+
+</style>

@@ -1,0 +1,130 @@
+<%- include ("./partials/cabecera") %>
+<%- include ("./partials/navbar") %>
+
+<div class="text-center mt-5 mb-5">
+    <img class="img-fluid loading" src="https://www.onlinelogomaker.com/blog/wp-content/uploads/2017/09/Erotic-Logo.jpg" width="250" height="94" alt="Logo de SEXOSUR" data-ll-status="loading">
+</div>
+
+<div class="container">
+    <h4 class="text-white text-center mt-5">
+        <i class="fas fa-map-marker-alt text-danger" aria-hidden="true"></i> ELIJA SU UBICACIÓN 
+    </h4>
+    <p class="text-center text-muted"> Al entrar declaras ser mayor de 18 años. </p>
+    <ul class="list-inline text-white text-center" style="margin-bottom: 100px">
+        <li class="list-inline-item"><a class="text-white btn btn-danger btn-sm mt-3" href="/ancud">Ancud</a></li>
+        <li class="list-inline-item"><a class="text-white btn btn-danger btn-sm mt-3" href="/quemchi">Quemchi</a></li>
+        <li class="list-inline-item"><a class="text-white btn btn-danger btn-sm mt-3" href="/castro">Castro</a></li>
+        <li class="list-inline-item"><a class="text-white btn btn-danger btn-sm mt-3" href="/dalcahue">Dalcahue</a></li>
+        <li class="list-inline-item"><a class="text-white btn btn-danger btn-sm mt-3" href="/chonchi">Chonchi</a></li>
+        <li class="list-inline-item"><a class="text-white btn btn-danger btn-sm mt-3" href="/quellon">Quellón</a></li>
+    </ul>
+</div>
+
+<div class="container text-center">
+
+<div class="container text-center">
+    <h3><b>Perfil de Colaborador</b></h3>
+    <div class="row mt-5">
+        <!-- Información del colaborador -->
+        <% colaboradoresConPortada.forEach(item => { %>
+            <div class="col-md-4 mb-4 w-100">
+                <div class="card" style="background-color: transparent;">
+                    <% if (item.imagenes_portada && item.imagenes_portada.length > 0) { %>
+                        <div class="imagenes-container">
+                            <div class="imagen-item">
+                                <img src="<%= basePath + '/' + item.imagenes_portada[0] %>" class="card-img-top imagen-card" alt="Portada de <%= item.colaborador.nombre_usuario %>" style="max-width: 100%; max-height: 300px; width: auto; height: auto; border-radius: 20px;">
+                            </div>
+                        </div>
+                    <% } %>
+                    
+                    
+                    <div class="card-body">
+                        <!-- Nombre del colaborador -->
+                        <h4 class="card-title"><%= item.colaborador.nombre_usuario %>, <%= item.colaborador.edad %> Años <i class="fas fa-check-circle" style="color: blue;"></i></h4>
+                        
+                        <a class="btn btn-danger mb-1 mr-1 " href="tel:+56<%= item.colaborador.telefono %>"> <i class="fas fa-phone" aria-hidden="true"></i> Llamar   </a>
+
+                        <a href="https://api.whatsapp.com/send?phone=56<%= item.colaborador.telefono %>" target="_blank" style="text-decoration: none; color: rgb(27, 237, 24);" rel="noopener noreferrer">
+                            <i class="fab fa-whatsapp"></i> +56<%= item.colaborador.telefono %>
+                        </a>
+                        <!-- Información del colaborador -->
+                        <div class="row">
+                            <div class="col">
+                                <BR></BR>
+                                <p>
+                                    <strong><%= item.colaborador.genero %></strong> <i class="fas fa-heart text-danger" aria-hidden="true"></i> 
+                                    /<strong> <%= item.colaborador.peso %> Kg.</strong>
+                                    /<strong> <%= Math.floor(item.colaborador.estatura) %> Cm.</strong>
+                                    /<strong> <%= item.colaborador.medidas %> </strong>
+                                    /<strong> <i class="fas fa-map-marker-alt text-danger" aria-hidden="true"></i> <%= item.colaborador.ciudad %> </strong>
+
+                                </p>
+                            </div>
+                            <div class="col">
+                        <p class="card-text"><strong>Descripción</strong></p>
+                        <p class="card-text"><strong><%= item.colaborador.descripcion %></strong></p>
+
+
+                            </div>
+                        </div>
+                        <hr>
+                        <p><strong> Mis Servicios</strong></p>
+                        <% item.colaborador.servicio.split(',').forEach(servicio => { %>
+                            <% const servicioCapitalizado = servicio.trim().charAt(0).toUpperCase() + servicio.trim().slice(1); %>
+                            <button type="button" class="btn btn-danger btn-sm btn-icon-split" data-id="<%= servicio.trim() %>">
+                                <span class="icon text-gray-600"><i class="fas fa-plus"></i></span>
+                                <span class="text"><%= servicioCapitalizado %></span>
+                            </button>
+                        <% }); %>
+                        
+
+                    </div>
+                    <% if (item.imagenes_portada && item.imagenes_portada.length > 1) { %>
+                        <div class="imagenes-container">
+                            <% for (var i = 1; i < item.imagenes_portada.length; i++) { %>
+                                <div class="imagen-item">
+                                    <img src="<%= basePath + '/' + item.imagenes_portada[i] %>" class="card-img-top imagen-card" alt="Portada de <%= item.colaborador.nombre_usuario %>" style="max-width: 100%; max-height: 300px; width: auto; height: auto; border-radius: 20px;">
+                                </div>
+                            <% } %>
+                        </div>
+                    <% } %>
+                    
+                    
+                </div>
+            </div>
+        <% }); %>
+    </div>
+</div>
+
+<%- include ("./partials/footer") %>
+<%- include ("./partials/pie") %>
+
+<style>
+
+.card {
+    margin-bottom: 20px; /* Añade margen inferior para mejorar el espaciado */
+}
+
+.imagenes-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center; /* Centra las imágenes en el contenedor */
+}
+
+.imagen-item {
+    flex: 1 1 calc(25% - 10px); /* Ajusta la anchura al 25% menos el gap */
+    box-sizing: border-box;
+    max-width: calc(25% - 10px); /* Asegura que el ancho máximo también sea del 25% menos el gap */
+    text-align: center;
+}
+
+.imagen-card {
+    max-width: 100%;
+    max-height: 300px;
+    width: auto;
+    height: auto;
+    border-radius: 20px;
+}
+
+</style>

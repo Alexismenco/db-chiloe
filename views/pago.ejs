@@ -1,0 +1,42 @@
+<%- include ("./partials/cabecera") %> 
+<%- include ("./partials/navbar") %> 
+
+<div class="row justify-content-center">
+    <div class="col-xl-10 col-lg-12 col-md-9 text-dark text-center">
+        <div class="text-center">
+            <h1 class="text-white"><small>Pago Escort</small></h1>
+            <h4></h4>
+            <p class="text-white">Sexo Chiloé te aguardan para impulsar tus ganancias.</p>
+        </div>
+
+        <form id="payment-form" action="/realizar-pago" method="post">
+            <div class="card o-hidden border-0 shadow-lg my-5">
+                <div class="card-header">
+                    <ul class="nav nav-justified nav-pills nav-fill justify-content-center">
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="#">Creación de perfil</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">Pago</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="#">Listo!</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <input type="hidden" name="email" value="<%= email %>">
+                    <input type="hidden" name="amount" value="20000">
+                    <div class="form-group">
+                        <label for="amount">Monto a pagar:</label>
+                        <p id="amount" class="form-control-static">20000 CLP</p>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block mt-3">Pagar con Payku</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<%- include ("./partials/footer") %> 
+<%- include ("./partials/pie") %> 

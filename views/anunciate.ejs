@@ -1,0 +1,357 @@
+<%- include ("./partials/cabecera") %> 
+<%- include ("./partials/navbar") %> 
+
+<style>
+    .selected {
+        background-color: red !important;
+        color: white !important;
+    }
+        .is-invalid {
+            border-color: red;
+            background-color: red;
+            border-radius: 20px;
+            color: black;
+        }
+</style>
+
+<div class="row justify-content-center">
+    <div class="col-xl-10 col-lg-12 col-md-9 text-dark text-center">
+        <div class="text-center">
+            <h1 class="text-white"><small>Registro Escort</small></h1>
+            <h4></h4>
+            <p class="text-white">Sexo Chiloé te aguardan para impulsar tus ganancias.</p>
+        </div>
+
+        <form id="register-form" action="anunciate1" method="post" enctype="multipart/form-data">
+            <div class="card o-hidden border-0 shadow-lg my-5">
+                <div class="card-header">
+                    <ul class="nav nav-justified nav-pills nav-fill justify-content-center">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">Creación de perfil</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="#">Pago</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="#">Listo!</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body p-0">
+                    <!-- Nested Row within Card Body -->
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="p-5">
+                                <fieldset>
+                                    <legend>Datos básicos</legend>
+                                    <div class="form-group field-registerform-fantasyname required">
+                                        <label for="registerform-fantasyname">Nombre de fantasia</label>
+                                        <input type="text" id="registerform-fantasyname" class="form-control" name="nombre" aria-required="true" required>
+                                        <small class="form-text text-muted">Se utilizará para mostrarse en su perfil.</small>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                    <div class="form-group field-registerform-fantasyname required">
+                                        <label for="registerform-fantasyname">Email</label>
+                                        <input type="email" id="registerform-fantasyname" class="form-control" name="email" aria-required="true" required>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                    <div class="form-group field-registerform-phone required">
+                                        <label for="registerform-phone">Número de teléfono</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1">+56</span>
+                                            </div>
+                                            <input type="number" minlength="9" maxlength="9" id="registerform-phone" class="form-control" name="telefono" placeholder="912341234" aria-required="true" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group field-registerform-age required">
+                                        <label for="registerform-age">Edad</label>
+                                        <input type="text" id="registerform-age" maxlength="2" class="form-control" name="edad" placeholder="Ej. 24" aria-required="true" required>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                    <div class="form-group field-registerform-genre required">
+                                        <label for="registerform-genre">Género</label>
+                                        <select id="registerform-genre" class="form-control is-valid" name="genero" aria-required="true" aria-invalid="false" required>
+                                            <option value="Mujer">Mujer</option>
+                                            <option value="Hombre">Hombre</option>
+                                            <option value="Travesti">Travesti</option>
+                                        </select>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                   
+                                    <div class="form-group field-registerform-measures required">
+                                        <label for="registerform-measures">Medidas</label>
+                                        <input type="text" id="registerform-measures" class="form-control" name="medidas" placeholder="Ej. 90-60-90" aria-required="true" required pattern="^\d{2,3}-\d{2,3}-\d{2,3}$" title="El formato debe ser Ej. 90-60-90">
+                                        <div class="invalid-feedback">Por favor, ingresa las medidas en el formato correcto (Ej. 90-60-90).</div>
+                                    </div>
+                                    
+                                    <div class="form-group field-registerform-weight required">
+                                        <label for="registerform-weight">Peso (Kg)</label>
+                                        <input type="text" id="registerform-weight" class="form-control" name="peso" placeholder="Ej. 65" aria-required="true" maxlength="3" required>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                    <div class="form-group field-registerform-height required">
+                                        <label for="registerform-height">Estatura (Cm)</label>
+                                        <input type="text" id="registerform-height" class="form-control" name="estatura" maxlength="3" placeholder="Ej. 167" aria-required="true" required>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                    <div class="form-group field-registerform-location required">
+                                        <label for="registerform-location">Ciudad</label>
+                                        <select id="registerform-location" class="form-control" name="ciudad" aria-required="true" required>
+                                            <option value="Ancud">Ancud</option>
+                                            <option value="Quemchi">Quemchi</option>
+                                            <option value="Castro">Castro</option>
+                                            <option value="Dalcahue">Dalcahue</option>
+                                            <option value="Chonchi">Chonchi</option>
+                                            <option value="Quellón">Quellón</option>
+                                        </select>
+                                        <small class="form-text text-muted">Ciudad en la que te gustaría ser publicada(o)</small>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                    <div class="mt-3 form-group field-registerform-photos required">
+                                        <label for="registerform-photos">Fotos</label>
+                                        <input type="file" id="registerform-photos" class="form-control-file" name="fotos[]" multiple accept="image/*" aria-required="true">
+                                        <small class="form-text text-muted" id="minimo1" >1 foto mÍnimo</small>
+                                        <small class="form-text text-muted">10 fotos máximo para empezar</small>
+                                        <div class="invalid-feedback"></div>
+                                    </div>
+                                    <div class="card-body p-5">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="d-none">
+                                                    <div class="form-group field-registeradditionalinfoform-services">
+                                                        <label>Servicios</label>
+                                                        <div id="registeradditionalinfoform-services">
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input type="checkbox" id="i0" class="custom-control-input" name="services[]" value="americana">
+                                                                <label class="custom-control-label" for="i0">Americana</label>
+                                                            </div>
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input type="checkbox" id="i1" class="custom-control-input" name="services[]" value="anal">
+                                                                <label class="custom-control-label" for="i1">Anal</label>
+                                                            </div>
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input type="checkbox" id="i2" class="custom-control-input" name="services[]" value="atencion-en-hoteles">
+                                                                <label class="custom-control-label" for="i2">Atencion en Hoteles</label>
+                                                            </div>
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input type="checkbox" id="i3" class="custom-control-input" name="services[]" value="besos">
+                                                                <label class="custom-control-label" for="i3">Besos</label>
+                                                            </div>
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input type="checkbox" id="i4" class="custom-control-input" name="services[]" value="departamento-propio">
+                                                                <label class="custom-control-label" for="i4">Departamento Propio</label>
+                                                            </div>
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input type="checkbox" id="i5" class="custom-control-input" name="services[]" value="despedida-de-solteros">
+                                                                <label class="custom-control-label" for="i5">Despedida de Solteros</label>
+                                                            </div>
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input type="checkbox" id="i6" class="custom-control-input" name="services[]" value="domicilio-propio">
+                                                                <label class="custom-control-label" for="i6">Domicilio Propio</label>
+                                                            </div>
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input type="checkbox" id="i7" class="custom-control-input" name="services[]" value="garganta-profunda">
+                                                                <label class="custom-control-label" for="i7">Garganta Profunda</label>
+                                                            </div>
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input type="checkbox" id="i8" class="custom-control-input" name="services[]" value="masajes">
+                                                                <label class="custom-control-label" for="i8">Masajes</label>
+                                                            </div>
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input type="checkbox" id="i9" class="custom-control-input" name="services[]" value="oral-con-condon">
+                                                                <label class="custom-control-label" for="i9">Oral con Condon</label>
+                                                            </div>
+
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input type="checkbox" id="i10" class="custom-control-input" name="services[]" value="oral-natural">
+                                                                <label class="custom-control-label" for="i10">Oral Natural</label>
+                                                            </div>
+
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input type="checkbox" id="i11" class="custom-control-input" name="services[]" value="rusa">
+                                                                <label class="custom-control-label" for="i11">Rusa</label>
+                                                            </div>
+
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input type="checkbox" id="i12" class="custom-control-input" name="services[]" value="servicio-a-domicilio">
+                                                                <label class="custom-control-label" for="i12">Servicio a Domicilio</label>
+                                                            </div>
+
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input type="checkbox" id="i13" class="custom-control-input" name="services[]" value="servicios-normales">
+                                                                <label class="custom-control-label" for="i13">Servicios Normales</label>
+                                                            </div>
+
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input type="checkbox" id="i14" class="custom-control-input" name="services[]" value="sexo">
+                                                                <label class="custom-control-label" for="i14">Sexo</label>
+                                                            </div>
+
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input type="checkbox" id="i15" class="custom-control-input" name="services[]" value="viajes">
+                                                                <label class="custom-control-label" for="i15">Viajes</label>
+
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <label for="none">Servicios</label>
+                                                <div class="d-flex mb-3 service-buttons" style="flex-direction: row; align-content: stretch; justify-content: flex-start; align-items: flex-start; flex-wrap: wrap; gap:5px;">
+                                                    <button type="button" class="btn btn-light btn-sm btn-icon-split" data-id="0">
+                                                        <span class="icon text-gray-600"><i class="fas fa-plus"></i></span><span class="text">Americana</span>
+                                                    </button>
+                                                    <button type="button" class="btn btn-sm btn-icon-split btn-light" data-id="1">
+                                                        <span class="icon text-gray-600"><i class="fas fa-plus"></i></span><span class="text">Anal</span>
+                                                    </button>
+                                                    <button type="button" class="btn btn-light btn-sm btn-icon-split" data-id="2">
+                                                        <span class="icon text-gray-600"><i class="fas fa-plus"></i></span><span class="text">Atencion en Hoteles</span>
+                                                    </button>
+                                                    <button type="button" class="btn btn-light btn-sm btn-icon-split" data-id="3">
+                                                        <span class="icon text-gray-600"><i class="fas fa-plus"></i></span><span class="text">Besos</span>
+                                                    </button>
+                                                    <button type="button" class="btn btn-light btn-sm btn-icon-split" data-id="4">
+                                                        <span class="icon text-gray-600"><i class="fas fa-plus"></i></span><span class="text">Departamento Propio</span>
+                                                    </button>
+                                                    <button type="button" class="btn btn-light btn-sm btn-icon-split" data-id="5">
+                                                        <span class="icon text-gray-600"><i class="fas fa-plus"></i></span><span class="text">Despedida de Solteros</span>
+                                                    </button>
+                                                    <button type="button" class="btn btn-light btn-sm btn-icon-split" data-id="6">
+                                                        <span class="icon text-gray-600"><i class="fas fa-plus"></i></span><span class="text">Domicilio Propio</span>
+                                                    </button>
+                                                    <button type="button" class="btn btn-light btn-sm btn-icon-split" data-id="7">
+                                                        <span class="icon text-gray-600"><i class="fas fa-plus"></i></span><span class="text">Garganta Profunda</span>
+                                                    </button>
+                                                    <button type="button" class="btn btn-light btn-sm btn-icon-split" data-id="8">
+                                                        <span class="icon text-gray-600"><i class="fas fa-plus"></i></span><span class="text">Masajes</span>
+                                                    </button>
+                                                    <button type="button" class="btn btn-light btn-sm btn-icon-split" data-id="9">
+                                                        <span class="icon text-gray-600"><i class="fas fa-plus"></i></span><span class="text">Oral con Condon</span>
+                                                    </button>
+                                                    <button type="button" class="btn btn-light btn-sm btn-icon-split" data-id="10">
+                                                        <span class="icon text-gray-600"><i class="fas fa-plus"></i></span><span class="text">Oral Natural</span>
+                                                    </button>
+                                                    <button type="button" class="btn btn-light btn-sm btn-icon-split" data-id="11">
+                                                        <span class="icon text-gray-600"><i class="fas fa-plus"></i></span><span class="text">Rusa</span>
+                                                    </button>
+                                                    <button type="button" class="btn btn-light btn-sm btn-icon-split" data-id="12">
+                                                        <span class="icon text-gray-600"><i class="fas fa-plus"></i></span><span class="text">Servicio a Domicilio</span>
+                                                    </button>
+                                                    <button type="button" class="btn btn-light btn-sm btn-icon-split" data-id="13">
+                                                        <span class="icon text-gray-600"><i class="fas fa-plus"></i></span><span class="text">Servicios Normales</span>
+                                                    </button>
+                                                    <button type="button" class="btn btn-light btn-sm btn-icon-split" data-id="14">
+                                                        <span class="icon text-gray-600"><i class="fas fa-plus"></i></span><span class="text">Sexo</span>
+                                                    </button>
+                                                    <button type="button" class="btn btn-light btn-sm btn-icon-split" data-id="15">
+                                                        <span class="icon text-gray-600"><i class="fas fa-plus"></i></span><span class="text">Viajes</span>
+                                                    </button>
+
+                                                    <div class="invalid-feedback" id="services-feedback" style="display: none;"></div>
+
+                                                </div>
+
+                                                <div>
+                                                    <div class="form-group field-registeradditionalinfoform-description">
+                                                        <label for="registeradditionalinfoform-description">Descripción</label>
+                                                        <textarea id="registeradditionalinfoform-description" class="form-control is-valid" name="descripcion" aria-invalid="false" required></textarea>
+                                                        <small class="form-text text-muted">Una breve descripción tuya para que tus clientes lo sepan</small>
+                                                        <div class="invalid-feedback"></div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>                            
+                            </fieldset>
+                                    
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer ">
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary btn-user">Crear</button>
+                </div>
+            </div>
+        </div>
+    </form>    
+</div>
+
+<%- include ("./partials/footer") %> 
+<%- include ("./partials/pie") %> 
+
+<script>
+// Verifica servicios 
+    document.addEventListener("DOMContentLoaded", function() {
+        const buttons = document.querySelectorAll(".service-buttons button");
+
+        buttons.forEach(button => {
+            button.addEventListener("click", function() {
+                this.classList.toggle("selected");
+                const serviceId = this.getAttribute("data-id");
+                console.log(serviceId)
+
+                const checkbox = document.querySelector(`#i${serviceId}`);
+                console.log(checkbox)
+                checkbox.checked = !checkbox.checked;
+            });
+        });
+    });
+
+    // Verifica si hay al menos una foto 
+    // Agregar un evento de escucha para el envío del formulario
+    document.querySelector('form').addEventListener('submit', function(event) {
+        var input = document.getElementById('registerform-photos');
+        var minimo = document.getElementById('minimo1');
+        
+        // Verificar si no se ha seleccionado ninguna foto
+        if (input.files.length === 0) {
+            event.preventDefault(); // Previene el envío del formulario
+            input.classList.add('is-invalid'); // Agrega la clase para mostrar el mensaje de error
+            minimo.classList.add('is-invalid'); // Agrega la clase para mostrar el mensaje de error
+        } else {
+            input.classList.remove('is-invalid'); // Remueve la clase si hay al menos una foto seleccionada
+            minimo.classList.remove('is-invalid'); // Remueve la clase si hay al menos una foto seleccionada
+        }
+    });
+      // Verifica si hay al menos una foto seleccionada
+      document.querySelector('form').addEventListener('submit', function(event) {
+            var input = document.getElementById('registerform-photos');
+            var minimo = document.getElementById('minimo1');
+
+            // Verificar si no se ha seleccionado ninguna foto
+            if (input.files.length === 0) {
+                event.preventDefault(); // Previene el envío del formulario
+                input.classList.add('is-invalid'); // Agrega la clase para mostrar el mensaje de error
+                minimo.classList.add('is-invalid'); // Agrega la clase para mostrar el mensaje de error
+            } else {
+                input.classList.remove('is-invalid'); // Remueve la clase si hay al menos una foto seleccionada
+                minimo.classList.remove('is-invalid'); // Remueve la clase si hay al menos una foto seleccionada
+            }
+
+            // Verificar si al menos un servicio está seleccionado
+            const checkboxes = document.querySelectorAll("input[type='checkbox'][name='services[]']");
+            const servicesFeedback = document.getElementById("services-feedback");
+            let isChecked = false;
+
+            checkboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    isChecked = true;
+                }
+            });
+
+            if (!isChecked) {
+                event.preventDefault(); // Previene el envío del formulario
+                servicesFeedback.style.display = "block"; // Muestra el mensaje de error
+                servicesFeedback.textContent = "Debes seleccionar al menos un servicio.";
+            } else {
+                servicesFeedback.style.display = "none"; // Oculta el mensaje de error si hay al menos un servicio seleccionado
+            }
+        });
+</script>
+
