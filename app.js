@@ -2,17 +2,13 @@ const express=require('express');
 const fetch = require('node-fetch');
 const session = require('express-session');
 const app=new express();
-const { conexion } = require('./db');
-const fs = require('fs');
+const fs = require('fs').promises;
 const path = require('path')
 const upload = require('express-fileupload');
-const bodyparser = require("body-parser");
 const nodemailer=require('nodemailer');
 require('dotenv').config();
 const chalk = require('chalk');
 const jwt = require('./utils/jwt');
-const {prevenirLogin ,permisosAdmin}=require('./middleware/autenticacion');
-const morgan = require('morgan');
 const useragent = require('express-useragent');
 
 // configuracion nodmeailer email
@@ -32,128 +28,13 @@ var transporter=nodemailer.createTransport({
   }
 
   // Configuracion de la express-session 
+
 app.use(session({
-  secret: process.env.SECRET_SESSION,
+  secret: 'tu_clave_secreta_segura', // Usa una cadena segura
   resave: false,
-  saveUninitialized: true,
-  cookie: { secure: false } // Asegúrate de establecer esto a true si usas HTTPS
+  saveUninitialized: true
 }));
 
-  // Funcion para eliminar registro si no cancela
-  const deleteColaborador = async (email) => {
-    try {
-      // Obtener el id del colaborador
-      const [rows] = await conexion.query('SELECT id FROM colaboradores WHERE email = ?', [email]);
-      if (rows.length === 0) return; // Si no se encuentra el colaborador, salir
-  
-      const colaboradorId = rows[0].id;
-  
-      // Obtener las imágenes del colaborador
-      const [imagenRows] = await conexion.query('SELECT imagen_url FROM imagenes_colaboradores WHERE colaborador_id = ?', [colaboradorId]);
-  
-      // Eliminar las imágenes del sistema de archivos
-      for (const row of imagenRows) {
-        if (fs.existsSync(row.imagen_url)) {
-          fs.unlinkSync(row.imagen_url);
-        }
-      }
-  
-      // Eliminar los registros de las imágenes
-      await conexion.query('DELETE FROM imagenes_colaboradores WHERE colaborador_id = ?', [colaboradorId]);
-  
-      // Eliminar el registro del colaborador
-      await conexion.query('DELETE FROM colaboradores WHERE id = ?', [colaboradorId]);
-  
-      console.log(`Registros y archivos del colaborador con email ${email} eliminados.`);
-    } catch (error) {
-      console.error('Error al eliminar registros y archivos:', error);
-    }
-  };
-  
-  async function updatePaymentStatus(email, status) {
-    await conexion.query('UPDATE colaboradores SET estado_pago = ? WHERE email = ?', [status, email]);
-  };
-
-  async function obtenerColaboradoresPorCiudad(ciudad) {
-    try {
-        // Consulta para obtener todos los colaboradores de la ciudad con estado de pago aprobado
-        const [rows] = await conexion.query('SELECT * FROM colaboradores WHERE estado_pago = "aprobado" AND ciudad = ?', [ciudad]);
-        
-        // Array para almacenar los colaboradores con sus imágenes de portada
-        const colaboradoresConPortada = [];
-        
-        // Para cada colaborador, selecciona una de sus imágenes como portada (si tiene alguna)
-        for (const colaborador of rows) {
-            // Consulta para obtener la imagen más reciente del colaborador
-            const [imagenes] = await conexion.query('SELECT * FROM imagenes_colaboradores WHERE colaborador_id = ? ORDER BY id DESC LIMIT 1', [colaborador.id]);
-            
-            // Verifica si hay imágenes para este colaborador
-            if (imagenes.length > 0) {
-                // Obtiene la ruta de la imagen
-                const imagenPath = imagenes[0].imagen_url;
-                
-                // Agrega el colaborador con la ruta de la imagen de portada al array
-                colaboradoresConPortada.push({
-                    colaborador: colaborador,
-                    imagen_portada: imagenPath
-                });
-            } else {
-                // Si el colaborador no tiene imágenes, simplemente agrégalo al array sin una imagen de portada
-                colaboradoresConPortada.push({
-                    colaborador: colaborador,
-                    imagen_portada: null
-                });
-            }
-        }
-
-        return colaboradoresConPortada;
-    } catch (error) {
-        console.error(`Error al obtener los colaboradores de ${ciudad}:`, error);
-        throw new Error(`Error al obtener los colaboradores de ${ciudad}`);
-    }
-}
-
-async function obtenerColaboradoresPorId(colaboradorId) {
-  try {
-    // Consulta para obtener el colaborador por su ID con estado de pago aprobado
-    const [rows] = await conexion.query('SELECT * FROM colaboradores WHERE id = ? AND estado_pago = "aprobado"', [colaboradorId]);
-    
-    // Array para almacenar el colaborador con sus imágenes de portada
-    const colaboradorConPortadas = [];
-    
-    // Verifica si se encontró un colaborador con ese ID
-    if (rows.length > 0) {
-      const colaborador = rows[0];
-      
-      // Consulta para obtener todas las imágenes del colaborador
-      const [imagenes] = await conexion.query('SELECT * FROM imagenes_colaboradores WHERE colaborador_id = ? ORDER BY id DESC', [colaborador.id]);
-      
-      // Verifica si hay imágenes para este colaborador
-      if (imagenes.length > 0) {
-        // Recorre todas las imágenes y las agrega al array
-        const imagenesUrls = imagenes.map(imagen => imagen.imagen_url);
-        
-        // Agrega el colaborador con las rutas de las imágenes de portada al array
-        colaboradorConPortadas.push({
-          colaborador: colaborador,
-          imagenes_portada: imagenesUrls
-        });
-        console.log(colaboradorConPortadas)
-      } else {
-        // Si el colaborador no tiene imágenes, simplemente agrégalo al array sin una imagen de portada
-        colaboradorConPortadas.push({
-          colaborador: colaborador,
-          imagenes_portada: []
-        });
-      }
-    }
-
-    return colaboradorConPortadas;
-  } catch (error) {
-    console.error(`Error al obtener el colaborador con ID ${colaboradorId}:`, error);
-    throw new Error(`Error al obtener el colaborador con ID ${colaboradorId}`);
-  }
-}
 
 // Middleware para analizar el User-Agent
 app.use(useragent.express());
@@ -195,181 +76,130 @@ app.use((req, res, next) => {
   next();
 });
 
-// Inicio
 app.get('/', async (req, res) => {
-    try {
-        // Consulta para obtener todos los colaboradores con estado de pago aprobado
-        const [rows] = await conexion.query('SELECT * FROM colaboradores WHERE estado_pago = "aprobado"');
-        
-        // Array para almacenar los colaboradores con sus imágenes de portada
-        const colaboradoresConPortada = [];
-        
-        // Para cada colaborador, selecciona una de sus imágenes como portada (si tiene alguna)
-        for (const colaborador of rows) {
-            // Consulta para obtener la imagen más reciente del colaborador
-            const [imagenes] = await conexion.query('SELECT * FROM imagenes_colaboradores WHERE colaborador_id = ? ORDER BY id DESC LIMIT 1', [colaborador.id]);
-            
-            // Verifica si hay imágenes para este colaborador
-            if (imagenes.length > 0) {
-                // Obtiene la ruta de la imagen
-                const imagenPath = imagenes[0].imagen_url;
+  try {
+      // Ruta al archivo scort.json
+      const scortFilePath = path.join(__dirname, 'scort.json');
 
-                
-                // Agrega el colaborador con la ruta de la imagen de portada al array
-                colaboradoresConPortada.push({
-                    colaborador: colaborador,
-                    imagen_portada: imagenPath
-                });
-            } else {
-                // Si el colaborador no tiene imágenes, simplemente agrégalo al array sin una imagen de portada
-                colaboradoresConPortada.push({
-                    colaborador: colaborador,
-                    imagen_portada: null
-                });
-            }
-        }
-        
-        // Renderiza la vista 'index' pasando los colaboradores con sus imágenes de portada
-        res.render('index', { colaboradoresConPortada });
+      // Leer el archivo scort.json
+      const data = await fs.readFile(scortFilePath, 'utf-8');
+      const scorts = JSON.parse(data);
+
+      // Renderizar la vista index con los datos de las scorts
+      console.log(scorts)
+      res.render('index', { scorts });
+  } catch (error) {
+      console.error('Error al leer scort.json:', error);
+      res.status(500).send('Error al cargar la página de inicio');
+  }
+});
+
+// Ruta dinámica para filtrar scorts por ciudad
+app.get('/ciudad/:nombre', async (req, res) => {
+    const ciudad = req.params.nombre; // Obtener el nombre de la ciudad desde la URL
+
+    try {
+        // Leer el archivo scort.json
+        const scortFilePath = path.join(__dirname, 'scort.json');
+        const data = await fs.readFile(scortFilePath, 'utf-8');
+        const scorts = JSON.parse(data);
+
+        // Filtrar las scorts por ciudad
+        const scortsCiudad = scorts[ciudad] || [];
+
+        // Renderizar la vista con las scorts de la ciudad
+        res.render('ciudad', { scorts: scortsCiudad, ciudad });
     } catch (error) {
-        // Manejo de errores
-        console.error('Error al obtener los colaboradores:', error);
-        res.status(500).send('Error al obtener los colaboradores');
+        console.error('Error al leer scort.json:', error);
+        res.status(500).send('Error al cargar la página de la ciudad');
     }
 });
-
-app.get('/ancud', async (req, res) => {
-  try {
-      const colaboradoresConPortada = await obtenerColaboradoresPorCiudad('Ancud');
-      res.render('ciudad', { colaboradoresConPortada });
-  } catch (error) {
-      res.status(500).send(error.message);
-  }
-});
-
-app.get('/quemchi', async (req, res) => {
-  try {
-      const colaboradoresConPortada = await obtenerColaboradoresPorCiudad('Quemchi');
-      res.render('ciudad', { colaboradoresConPortada });
-  } catch (error) {
-      res.status(500).send(error.message);
-  }
-});
-
-app.get('/castro', async (req, res) => {
-  try {
-      const colaboradoresConPortada = await obtenerColaboradoresPorCiudad('Castro');
-      res.render('ciudad', { colaboradoresConPortada });
-  } catch (error) {
-      res.status(500).send(error.message);
-  }
-});
-
-app.get('/dalcahue', async (req, res) => {
-  try {
-      const colaboradoresConPortada = await obtenerColaboradoresPorCiudad('Dalcahue');
-      res.render('ciudad', { colaboradoresConPortada });
-  } catch (error) {
-      res.status(500).send(error.message);
-  }
-});
-
-app.get('/quellon', async (req, res) => {
-  try {
-      const colaboradoresConPortada = await obtenerColaboradoresPorCiudad('Quellon');
-      res.render('ciudad', { colaboradoresConPortada });
-  } catch (error) {
-      res.status(500).send(error.message);
-  }
-});
-
-app.get('/chonchi', async (req, res) => {
-  try {
-      const colaboradoresConPortada = await obtenerColaboradoresPorCiudad('Chonchi');
-      res.render('ciudad', { colaboradoresConPortada });
-  } catch (error) {
-      res.status(500).send(error.message);
-  }
-});
-
 app.get('/colaborador/:id', async (req, res) => {
-  const colaboradorId = req.params.id;
-  
-  try {
-      const colaboradoresConPortada = await obtenerColaboradoresPorId(colaboradorId);
-      const basePath = req.protocol + '://' + req.get('host');
 
-      res.render('colaborador', { colaboradoresConPortada, basePath });
-  } catch (error) {
-      res.status(500).send(error.message);
-  }
 });
 
 // anunciate
 app.get('/anunciate', async (req,res) => {
  
+
     res.render('anunciate',{})
 });
 
 app.post('/anunciate1', async (req, res) => {
     const { nombre, email, edad, telefono, genero, medidas, peso, estatura, ciudad, descripcion } = req.body;
-    let servicio = req.body['services[]'];
+    let servicios = req.body['services[]'];
     const imagenes = req.files['fotos[]'];
-  
-    if (!Array.isArray(servicio)) {
-      servicio = [servicio];
-    }
-  
-    const colaborador = {
-      nombre_usuario: nombre,
-      email,
-      edad,
-      telefono,
-      genero,
-      medidas,
-      peso,
-      estatura,
-      ciudad,
-      servicio: servicio.join(', '),
-      descripcion,
-      estado_pago: 'pendiente'
-    };
-  
-    try {
-      const [results] = await conexion.query('INSERT INTO colaboradores SET ?', colaborador);
-      const colaborador_id = results.insertId;
-  
-      ensureUploadsDir();
-  
-      if (imagenes) {
-        const imagenPromises = (Array.isArray(imagenes) ? imagenes : [imagenes]).map((imagen) => {
-          return new Promise((resolve, reject) => {
-            const uniqueFilename = `${email}_${imagen.name}`;
-            const imagenPath = path.join('uploads', uniqueFilename);
-            imagen.mv(imagenPath, (err) => {
-              if (err) {
-                console.error('Error saving image:', err.stack);
-                return reject(err);
-              }
-              conexion.query('INSERT INTO imagenes_colaboradores (colaborador_id, imagen_url) VALUES (?, ?)', [colaborador_id, uniqueFilename], (err, results) => {
-                if (err) {
-                  console.error('Error inserting image record:', err.stack);
-                  return reject(err);
-                }
-                resolve(results);
-              });
-            });
-          });
-        });
-      }
-  
-      res.render('pago', { email });
-    } catch (err) {
-      console.error('Error processing request:', err.stack);
-      res.status(500).send('Error processing request');
-    }
-  });
 
+    // Asegurarse de que "servicios" sea un array
+    if (!Array.isArray(servicios)) {
+        servicios = [servicios];
+    }
+
+    // Crear un objeto con los datos de la colaboradora
+    const colaboradora = {
+        nombre,
+        email,
+        edad: parseInt(edad, 10),
+        telefono,
+        genero,
+        medidas,
+        peso: parseInt(peso, 10),
+        estatura: parseInt(estatura, 10),
+        ciudad,
+        servicios: servicios.join(', '), // Unir los servicios en un string
+        descripcion,
+        estado_pago: 'pendiente',
+        fotos: [] // Aquí guardaremos las rutas de las fotos
+    };
+
+    try {
+        // Guardar las imágenes en la carpeta public/img
+        const telefonoFormateado = telefono.replace(/\D/g, ''); // Eliminar caracteres no numéricos
+        const directorioFotos = path.join(__dirname, 'public', 'img');
+
+        // Crear el directorio si no existe
+        await fs.mkdir(directorioFotos, { recursive: true });
+
+        // Guardar cada imagen con un nombre único
+        if (imagenes) {
+            const imagenesArray = Array.isArray(imagenes) ? imagenes : [imagenes]; // Asegurar que sea un array
+            for (let i = 0; i < imagenesArray.length; i++) {
+                const nombreFoto = `img_${telefonoFormateado}_${i + 1}${path.extname(imagenesArray[i].name)}`;
+                const rutaFoto = path.join(directorioFotos, nombreFoto);
+                await imagenesArray[i].mv(rutaFoto); // Mover la imagen a la carpeta
+                colaboradora.fotos.push(`img/${nombreFoto}`); // Guardar la ruta relativa
+            }
+        }
+
+        // Leer el archivo scort.json
+        const scortFilePath = path.join(__dirname, 'scort.json');
+        let scorts = {};
+
+        try {
+            const data = await fs.readFile(scortFilePath, 'utf-8');
+            scorts = JSON.parse(data);
+        } catch (error) {
+            console.error('Error al leer scort.json, se creará uno nuevo:', error);
+        }
+
+        // Inicializar la ciudad si no existe
+        if (!scorts[ciudad]) {
+            scorts[ciudad] = [];
+        }
+
+        // Agregar la nueva colaboradora a la ciudad correspondiente
+        scorts[ciudad].push(colaboradora);
+
+        // Guardar el archivo scort.json actualizado
+        await fs.writeFile(scortFilePath, JSON.stringify(scorts, null, 2), 'utf-8');
+
+        // Renderizar la vista de pago
+        res.render('pago', { email });
+    } catch (err) {
+        console.error('Error procesando la solicitud:', err.stack);
+        res.status(500).send('Error procesando la solicitud');
+    }
+});
   app.post('/realizar-pago', async (req, res) => {
     try {
         const now = new Date();

@@ -27,35 +27,42 @@
 </div>
 
 <div class="container text-center">
+    <!--
     <h3><b>Aquí encontrarás nuestros colaboradores con los servicios más amados por nuestros clientes.</b></h3>
-    <!-- Agrega una breve descripción si lo deseas -->
+    Agrega una breve descripción si lo deseas -->
 
     <div class="row mt-5">
         <!-- Comienza la sección de la galería -->
-
-        <!-- Para cada colaborador con su imagen de portada -->
-        <% colaboradoresConPortada.forEach(colaborador => { %>
-            <div class="col-md-4 mb-4">
-                <div class="card" style="background-color: transparent;">
-                    <a href="/colaborador/<%= colaborador.colaborador.id %> " style="text-decoration: none; color: white;">
-                    <!-- Si el colaborador tiene una imagen de portada, muéstrala -->
-                    <% if (colaborador.imagen_portada) { %>
-                        <div class="imagen-container">
-                            <img src="<%= colaborador.imagen_portada %>" class="card-img-top imagen-card" alt="Portada de <%= colaborador.colaborador.nombre_usuario %>" style="max-width: 100%; max-height: 300px; width: auto; height: auto; border-radius: 20px;">
-                        </div>
-                    <% } %>
-                    <div class="card-body">
-                        <!-- Muestra el nombre y otros detalles del colaborador -->
-                        <h5 class="card-title"><%= colaborador.colaborador.nombre_usuario %> <span><i class="fas fa-check-circle" aria-hidden="true" style="color: blue;"></i></span></h5>
-                        <p class="card-text"><%= colaborador.colaborador.ciudad + ', ' + colaborador.colaborador.edad %> años</p>
-                        <!-- Puedes añadir más detalles aquí -->
+    
+        <!-- Para cada ciudad en scorts -->
+        <% for (const ciudad in scorts) { %>
+            <!-- Para cada colaborador en la ciudad -->
+            <% scorts[ciudad].forEach(colaborador => { %>
+                <div class="col-md-4 mb-4">
+                    <div class="card" style="background-color: transparent;">
+                        <a href="/colaborador/<%= colaborador.id %>" style="text-decoration: none; color: white;">
+                            <!-- Si el colaborador tiene fotos, muestra la primera como portada -->
+                            <% if (colaborador.fotos && colaborador.fotos.length > 0) { %>
+                                <div class="imagen-container">
+                                    <img src="<%= colaborador.fotos[0] %>" class="card-img-top imagen-card" alt="Portada de <%= colaborador.nombre %>" style="max-width: 100%; max-height: 300px; width: auto; height: auto; border-radius: 20px;">
+                                </div>
+                            <% } %>
+                            <div class="card-body">
+                                <!-- Muestra el nombre y otros detalles del colaborador -->
+                                <h5 class="card-title">
+                                    <%= colaborador.nombre %>
+                                    <span><i class="fas fa-check-circle" aria-hidden="true" style="color: blue;"></i></span>
+                                </h5>
+                                <p class="card-text">
+                                    <%= colaborador.ciudad + ', ' + colaborador.edad %> años
+                                </p>
+                                <!-- Puedes añadir más detalles aquí -->
+                            </div>
+                        </a>
                     </div>
-                    </a>
                 </div>
-            </div>
-        <% }); %>
-        
-        <!-- Repite el mismo formato para cada colaborador -->
+            <% }); %>
+        <% } %>
     </div>
 </div>
 

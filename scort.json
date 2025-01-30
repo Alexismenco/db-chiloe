@@ -1,0 +1,116 @@
+{
+    "Ancud": [
+        {
+            "nombre": "Scort Ancud 1",
+            "email": "scort1@example.com",
+            "edad": 25,
+            "telefono": "+56912345678",
+            "genero": "femenino",
+            "medidas": "90-60-90",
+            "peso": 65,
+            "estatura": 167,
+            "ciudad": "Ancud",
+            "servicios": "servicio1, servicio2",
+            "descripcion": "Descripción breve de la scort de Ancud.",
+            "estado_pago": "pendiente",
+            "fotos": [
+                "img/img_912345678_1.jpg"
+            ]
+        }
+    ],
+    "Quemchi": [
+        {
+            "nombre": "Scort Quemchi 1",
+            "email": "scort2@example.com",
+            "edad": 30,
+            "telefono": "+56987654321",
+            "genero": "femenino",
+            "medidas": "85-55-85",
+            "peso": 60,
+            "estatura": 170,
+            "ciudad": "Quemchi",
+            "servicios": "servicio1, servicio2",
+            "descripcion": "Descripción breve de la scort de Quemchi.",
+            "estado_pago": "pendiente",
+            "fotos": [
+                "img/img_987654321_1.jpg"
+            ]
+        }
+    ],
+    "Castro": [
+        {
+            "nombre": "Scort Castro 1",
+            "email": "scort3@example.com",
+            "edad": 28,
+            "telefono": "+56912348765",
+            "genero": "femenino",
+            "medidas": "88-58-88",
+            "peso": 62,
+            "estatura": 165,
+            "ciudad": "Castro",
+            "servicios": "servicio1, servicio2",
+            "descripcion": "Descripción breve de la scort de Castro.",
+            "estado_pago": "pendiente",
+            "fotos": [
+                "img/img_912348765_1.jpg"
+            ]
+        }
+    ],
+    "Dalcahue": [
+        {
+            "nombre": "Scort Dalcahue 1",
+            "email": "scort4@example.com",
+            "edad": 26,
+            "telefono": "+56956781234",
+            "genero": "femenino",
+            "medidas": "87-57-87",
+            "peso": 61,
+            "estatura": 168,
+            "ciudad": "Dalcahue",
+            "servicios": "servicio1, servicio2",
+            "descripcion": "Descripción breve de la scort de Dalcahue.",
+            "estado_pago": "pendiente",
+            "fotos": [
+                "img/img_956781234_1.jpg"
+            ]
+        }
+    ],
+    "Quellón": [
+        {
+            "nombre": "Scort Quellón 1",
+            "email": "scort5@example.com",
+            "edad": 29,
+            "telefono": "+56943218765",
+            "genero": "femenino",
+            "medidas": "89-59-89",
+            "peso": 63,
+            "estatura": 169,
+            "ciudad": "Quellón",
+            "servicios": "servicio1, servicio2",
+            "descripcion": "Descripción breve de la scort de Quellón.",
+            "estado_pago": "pendiente",
+            "fotos": [
+                "img/img_943218765_1.jpg"
+            ]
+        }
+    ],
+    "Chonchi": [
+        {
+            "nombre": "Scort Chonchi 1",
+            "email": "scort6@example.com",
+            "edad": 27,
+            "telefono": "+56987651234",
+            "genero": "femenino",
+            "medidas": "86-56-86",
+            "peso": 64,
+            "estatura": 166,
+            "ciudad": "Chonchi",
+            "servicios": "servicio1, servicio2",
+            "descripcion": "Descripción breve de la scort de Chonchi.",
+            "estado_pago": "pendiente",
+            "fotos": [
+                "img/img_987651234_1.jpg"
+            ]
+        }
+    ]
+}
